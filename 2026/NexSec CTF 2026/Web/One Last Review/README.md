@@ -3,7 +3,7 @@
 - **Event:** NexSec CTF 2026
 - **Category:** Web
 - **Difficulty:** Hard
-- **Flag:** `nexsec26{Did_you_enjoy_DnD_song?kinda_g00d_actually_oh_btw_this_is_4don1s_cve_...}`
+- **Flag:** `nexsec26{Did_you_enjoy_DnD_song?kinda_g00d_actually_oh_btw_this_is_4don1s_cve_845ec5d251ac9e2bae799671eb8673d32142c4c80cf8e6961692359189a79ed1}`
 
 > Competition rule note: the only AI allowed in this CTF is DeepSeek, so every step below was driven by prompting DeepSeek. I've included the exact prompts I sent it next to what I did with its answers.
 
@@ -23,7 +23,13 @@ The flag lives in `/app/flag.txt` (mode `400`), so nothing short of code executi
 
 I started by just mapping the app.
 
-> **Me → DeepSeek:** "yo i got a web ctf, target is `http://koala.nexsec.my:<PORT>`. flag looks like `nexsec26{...}`. can u start by looking at the homepage source and tell me what pages + api endpoints the js is calling"
+> **Me → DeepSeek:** "yo i got a web ctf, target is `http://koala.nexsec.my:37373`. flag looks like `nexsec26{...}`. can u start by looking at the homepage source and tell me what pages + api endpoints the js is calling"
+
+> Note: the instance is re-spawned on a new port each time, so I'll use `B` for the base URL in the commands below:
+>
+> ```bash
+> B="http://koala.nexsec.my:37373"   # swap in whatever port your instance is on
+> ```
 
 The homepage links to `/login`. The login page JS posts JSON to `/api/v1/auth/login` and, on success, redirects to `/admin` if `role === 'admin'`, otherwise `/posts/1/comments`. The comments page posts to `/api/v1/comments`.
 
@@ -175,7 +181,7 @@ curl -s "$B/posts/9999/comments" | grep -oE 'nexsec26\{[^}]*\}'
 Within one bot cycle:
 
 ```
-nexsec26{Did_you_enjoy_DnD_song?kinda_g00d_actually_oh_btw_this_is_4don1s_cve_...}
+nexsec26{Did_you_enjoy_DnD_song?kinda_g00d_actually_oh_btw_this_is_4don1s_cve_845ec5d251ac9e2bae799671eb8673d32142c4c80cf8e6961692359189a79ed1}
 ```
 
 The flag even name-drops the root cause: the **AdonisJS bodyparser path-traversal CVE**.
@@ -183,7 +189,7 @@ The flag even name-drops the root cause: the **AdonisJS bodyparser path-traversa
 ## Flag
 
 ```
-nexsec26{Did_you_enjoy_DnD_song?kinda_g00d_actually_oh_btw_this_is_4don1s_cve_...}
+nexsec26{Did_you_enjoy_DnD_song?kinda_g00d_actually_oh_btw_this_is_4don1s_cve_845ec5d251ac9e2bae799671eb8673d32142c4c80cf8e6961692359189a79ed1}
 ```
 
 ## Takeaways
